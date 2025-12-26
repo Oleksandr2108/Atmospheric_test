@@ -29,6 +29,8 @@ function MarkerClusterLayer({ users, filter }: UserMapProps) {
   const map = useMap();
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
 
+  const isMobile = window.innerWidth < 768;
+
   useEffect(() => {
     if (clusterGroupRef.current) {
       map.removeLayer(clusterGroupRef.current);
@@ -44,10 +46,11 @@ function MarkerClusterLayer({ users, filter }: UserMapProps) {
 
     const markerClusterGroup = L.markerClusterGroup({
       chunkedLoading: true,
-      maxClusterRadius: 80,
+      maxClusterRadius: isMobile ? 60 : 80,
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
+      spiderfyDistanceMultiplier: isMobile ? 2 : 1,
     });
 
     filteredUsers.forEach((user) => {
@@ -55,12 +58,24 @@ function MarkerClusterLayer({ users, filter }: UserMapProps) {
         icon: DefaultIcon,
       });
 
-      marker.bindPopup(`
-        <div style="min-width: 200px;">
-          <strong>${user.name}</strong><br/>
-          <em>${user.interests.join(", ")}</em>
+      marker.bindPopup(
+        `
+        <div style="min-width: ${isMobile ? "150px" : "200px"}; max-width: ${
+          isMobile ? "250px" : "300px"
+        };">
+          <strong style="font-size: ${isMobile ? "14px" : "16px"};">${
+          user.name
+        }</strong><br/>
+          <em style="font-size: ${
+            isMobile ? "12px" : "14px"
+          };">${user.interests.join(", ")}</em>
         </div>
-      `);
+      `,
+        {
+          maxWidth: isMobile ? 250 : 300,
+          closeButton: true,
+        }
+      );
 
       markerClusterGroup.addLayer(marker);
     });
@@ -84,8 +99,10 @@ const UserMap = ({ users, filter }: UserMapProps) => {
     <MapContainer
       center={[49.0, 31.0]}
       zoom={6}
-      style={{ height: "100vh", width: "100%" }}
+      style={{ height: "70vh", width: "100%", marginTop: "30px" }}
       scrollWheelZoom={true}
+      doubleClickZoom={false}
+      touchZoom={true}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

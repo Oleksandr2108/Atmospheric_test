@@ -1,73 +1,181 @@
-# React + TypeScript + Vite
+# 🗺️ Atmospheric School - Interactive User Map
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Інтерактивна карта користувачів з фільтрацією за інтересами та кластеризацією маркерів. Проект побудований з використанням React, TypeScript, Leaflet та Tailwind CSS.
 
-Currently, two official plugins are available:
+## 🌐 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Проект задеплоєно на Vercel: [https://atmospheric-test.vercel.app/](https://atmospheric-test.vercel.app/)
 
-## React Compiler
+## ✨ Особливості
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- 🗺️ **Інтерактивна карта** на базі Leaflet з OpenStreetMap
+- 📍 **Кластеризація маркерів** для оптимальної роботи з великою кількістю точок (до 10,000+ користувачів)
+- 🔍 **Реалтайм фільтрація** за інтересами користувачів
+- 📱 **Повністю адаптивний дизайн** для мобільних та десктоп пристроїв
+- ⚡ **Швидка продуктивність** завдяки оптимізованій кластеризації
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Технології
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React 19.2.0** - UI бібліотека
+- **TypeScript** - типізація
+- **Vite** - швидкий збірник
+- **Leaflet** - бібліотека інтерактивних карт
+- **React Leaflet** - React компоненти для Leaflet
+- **Leaflet.markercluster** - кластеризація маркерів
+- **Tailwind CSS** - utility-first CSS фреймворк
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📦 Встановлення
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Клонуйте репозиторій:
+```bash
+git clone <repository-url>
+cd atmospheric-test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Встановіть залежності:
+```bash
+npm install
 ```
+
+3. Запустіть dev сервер:
+```bash
+npm run dev
+```
+
+4. Відкрийте браузер за адресою: `http://localhost:5173`
+
+## 📁 Структура проекту
+```
+atmospheric-test/
+├── public/
+│   └── users.json          # Дані користувачів
+├── src/
+│   ├── assets/             # Статичні файли (іконки, зображення)
+│   ├── components/
+│   │   └── UsersMap/
+│   │       ├── UserMap.tsx              # Компонент карти з маркерами
+│   │       └── InterestFilter/
+│   │           └── InterestFilter.tsx   # Компонент фільтрації
+│   ├── types/
+│   │   └── User.ts         # TypeScript типи
+│   ├── App.tsx             # Головний компонент
+│   ├── App.css             # Стилі
+│   └── main.tsx            # Точка входу
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── tailwind.config.js
+```
+
+## 🎯 Основні компоненти
+
+### UserMap
+Головний компонент карти, який:
+- Відображає інтерактивну карту з Leaflet
+- Використовує `MarkerClusterLayer` для кластеризації маркерів
+- Підтримує фільтрацію користувачів
+- Адаптується під мобільні пристрої (менший радіус кластерів, оптимізовані popup)
+
+### InterestFilter
+Компонент фільтрації, який:
+- Дозволяє шукати користувачів за інтересами
+- На десктопі - фіксована панель зверху зліва
+- На мобільних - плаваюча кнопка + панель, що висувається знизу
+- Підтримує очищення фільтра та пошук по Enter
+
+### MarkerClusterLayer
+Внутрішній компонент для управління кластерами:
+- Створює та видаляє кластерні групи
+- Фільтрує користувачів на основі пошукового запиту
+- Оптимізує продуктивність через `useEffect` cleanup
+
+## 📊 Формат даних
+
+Файл `public/users.json` повинен мати наступну структуру:
+```json
+[
+  {
+    "name": "Ім'я користувача",
+    "lat": 50.4501,
+    "lon": 30.5234,
+    "interests": ["music", "react", "hiking"]
+  }
+]
+```
+
+### Поля:
+- `name` (string) - ім'я користувача
+- `lat` (number) - широта (latitude)
+- `lon` (number) - довгота (longitude)
+- `interests` (string[]) - масив інтересів
+
+## 🎨 Кастомізація
+
+### Зміна стилів маркерів
+
+У файлі `UserMap.tsx` знайдіть:
+```typescript
+const DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],      // Розмір іконки
+  iconAnchor: [12, 41],    // Точка прив'язки
+  popupAnchor: [0, -41],   // Позиція popup
+});
+```
+
+### Налаштування кластеризації
+
+У `MarkerClusterLayer` компоненті:
+```typescript
+const markerClusterGroup = L.markerClusterGroup({
+  chunkedLoading: true,           // Поступове завантаження
+  maxClusterRadius: 80,           // Радіус кластеризації (в пікселях)
+  spiderfyOnMaxZoom: true,        // Розкидання маркерів на макс. зумі
+  showCoverageOnHover: false,     // Показ покриття при наведенні
+  zoomToBoundsOnClick: true,      // Зум при кліку на кластер
+});
+```
+
+### Зміна центру карти
+
+У `UserMap.tsx`:
+```typescript
+<MapContainer
+  center={[49.0, 31.0]}  // [latitude, longitude]
+  zoom={6}               // Початковий рівень зуму
+  // ...
+>
+```
+
+## 🚀 Деплой
+
+Проект використовує Vercel для деплою:
+
+1. Підключіть репозиторій до Vercel
+2. Vercel автоматично визначить Vite конфігурацію
+3. Кожен push в main гілку автоматично деплоїться
+
+### Локальний білд
+```bash
+npm run build
+npm run preview
+```
+
+## 🔧 Доступні скрипти
+```bash
+npm run dev      # Запуск dev сервера
+npm run build    # Білд для продакшену
+npm run preview  # Перегляд production білду
+npm run lint     # Перевірка коду з ESLint
+```
+
+
+
+
+
+
+
+
+

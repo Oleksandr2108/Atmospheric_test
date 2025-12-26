@@ -19,8 +19,8 @@ const InterestFilter = ({ onFilterChange }: InterestFilterProps) => {
   };
 
   return (
-    <div className="bg-white rounded-xl border-2 p-[20px]">
-      <h1>Filered interests</h1>
+    <div className="bg-white rounded-xl border-2 p-5">
+      <h1 className="text-2xl xl:text-4xl font-bold mb-5">Filered interests</h1>
       <div className="w-full ">
         <div className="relative">
           <input
